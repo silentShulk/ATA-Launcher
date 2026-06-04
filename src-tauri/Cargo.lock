@@ -182,6 +182,7 @@ dependencies = [
 name = "ata-installer"
 version = "0.1.0"
 dependencies = [
+ "dirs",
  "serde",
  "serde_json",
  "tauri",

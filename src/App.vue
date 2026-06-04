@@ -1,160 +1,194 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 
-const greetMsg = ref("");
-const name = ref("");
 
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  greetMsg.value = await invoke("greet", { name: name.value });
-}
+
+const installationState = ref<string>("");
+const selectedUI = ref("");
+
+onMounted(async () => {
+    const result: string = await invoke("check_installation_state");
+    installationState.value = result;
+
+    const uiResult: string = await invoke("get_selected_ui");
+    selectedUI.value = uiResult;
+});
 </script>
 
+
+
 <template>
-  <main class="container">
-    <h1>Welcome to Tauri + Vue</h1>
+<div id="app">
+    <header class="ata-header">
+        <h1 class="ata-title"> ATA Launcher </h1>
+    </header>
 
-    <div class="row">
-      <a href="https://vite.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
-    </div>
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-
-    <form class="row" @submit.prevent="greet">
-      <input id="greet-input" v-model="name" placeholder="Enter a name..." />
-      <button type="submit">Greet</button>
-    </form>
-    <p>{{ greetMsg }}</p>
-  </main>
+    <main class="ata-main ata-flex-column">
+        <div id="features" class="ata-flex ata-centered-content">
+            <div id="installation" class="ata-flex-column ata-centered-content">
+                <button id="install" class="ata-btn"> Install ATA </button>
+                <p>{{ installationState }}</p>
+            </div>
+            <div id="ui-selection" class="ata-flex-column ata-centered-content">
+                <button id="select" class="ata-btn">
+                    Select UI
+                </button>
+                <p>{{ selectedUI }}</p>
+            </div>
+        </div>
+        <div id="launcher" class="ata-centered-content"
+        v-if="installationState === 'Everything is Installed'">
+            <button id="launch" class="ata-btn">
+                LAUNCH ATA
+            </button>
+        </div>
+        <div v-else class="ata-centered-content">
+            <h2 class="ata-colors-critical"> SOMETHING IS WRONG<br>FIX YOUR ATA INSTALLATION </h2>
+        </div>
+    </main>
+</div>
 </template>
 
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+
+
+<style lang="scss">
+#app {
+    display: flex;
+    flex-direction: column;    
+    
+    height: 100vh;
+    width: 100%;
+    
+    background-color: $ata-main;
+    font-family: Jetbrains Mono;
+
+    overflow: hidden;
 }
 
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
+#install, #select, #launch {
+    background-color: transparent;
+    color: $ata-black;
 }
 
-</style>
-<style>
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+#features {
+    width: 100%;
+    height: 50vh;
+}
+.installation, #ui-selection {
+    width: 50%;
+}
+#install, #select {
+    padding: 15px;
+    
+    border: 2px solid $ata-accent;
 
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+    font-size: 1.25em;
+}
+#install:hover, #select:hover {
+    background-color: $ata-accent;
+    color: $ata-main;
+    border: 2px solid $ata-black;
 }
 
-.container {
-  margin: 0;
-  padding-top: 10vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
+#launcher {
+    height: 50vh;
+}
+#launch {
+    width: 40%;
+    height: 40%;
+
+    border: 2px solid $ata-accent-secondary;
+
+    font-size: 1.5em;
+    font-weight: bold;
+}
+#launch:hover {
+    background-color: $ata-accent-secondary;
+    color: $ata-accent-tertiary;
+    border: 2px solid $ata-black;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
+
+
+.ata-header {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    
+    text-align: center;
+
+    color: $ata-accent;
+}
+.ata-title {
+    font-size: 40px;
 }
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
+.ata-main {
+    display: flex;
+    flex-grow: 1;
+
+    min-height: 0;
+    margin: 10px;
+
+    gap: 10px;
 }
 
-.row {
-  display: flex;
-  justify-content: center;
+.ata-btn {
+    border-radius: 5px;
+
+    cursor: pointer;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+.ata-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ata-spaceless {
+    margin: 0;
+    padding: 0;
+}
+.ata-flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ata-flex-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.ata-centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.ata-centered-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-a:hover {
-  color: #535bf2;
+.ata-colors {
+    background-color: $ata-accent;
+    color: $ata-main;
+}
+.ata-colors-secondary {
+    background-color: $ata-accent-secondary;
+    color: $ata-accent-tertiary;
+}
+.ata-colors-critical {
+    background-color: $ata-accent-secondary;
+    color: $ata-black;
+    
+    box-shadow: red 0px 5px 15px;
 }
 
-h1 {
-  text-align: center;
+body, html {
+    margin: 0;
+    padding: 0;
 }
-
-input,
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-button {
-  cursor: pointer;
-}
-
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
-}
-
-#greet-input {
-  margin-right: 5px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
-
-  a:hover {
-    color: #24c8db;
-  }
-
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
-  }
-  button:active {
-    background-color: #0f0f0f69;
-  }
-}
-
 </style>

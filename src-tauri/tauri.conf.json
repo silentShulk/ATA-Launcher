@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "ata-installer",
+  "productName": "ata-launcher",
   "version": "0.1.0",
-  "identifier": "com.cmarco.ata-installer",
+  "identifier": "com.cmarco.ata-launcher",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:1420",
@@ -12,9 +12,10 @@
   "app": {
     "windows": [
       {
-        "title": "ata-installer",
-        "width": 800,
-        "height": 600
+        "title": "ata-launcher",
+        "width": 400,
+        "height": 600,
+        "decorations": false
       }
     ],
     "security": {
