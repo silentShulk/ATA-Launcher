@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
+import List from "./Components/List.vue";
 
 
 
-const installationState = ref<string>("");
-const selectedUI = ref("");
+const installationState = ref<[boolean, boolean, boolean, boolean]>([false, false, false, false]);
+const selectedStyle = ref("");
 
 onMounted(async () => {
-    const result: string = await invoke("check_installation_state");
-    installationState.value = result;
+    installationState.value = await invoke("check_installation_state");
 
-    const uiResult: string = await invoke("get_selected_ui");
-    selectedUI.value = uiResult;
+    selectedStyle.value = await invoke("get_selected_style");
 });
 </script>
 
@@ -24,29 +23,31 @@ onMounted(async () => {
         <h1 class="ata-title"> ATA Launcher </h1>
     </header>
 
-    <main class="ata-main ata-flex-column">
-        <div id="features" class="ata-flex ata-centered-content">
-            <div id="installation" class="ata-flex-column ata-centered-content">
-                <button id="install" class="ata-btn"> Install ATA </button>
-                <p>{{ installationState }}</p>
+    <main class="ata-main">
+        <div id="features">
+            <div id="installation-state" class="ata-flex-column ata-centered-content">
+                <h2> State of ATA<br>installation </h2>
+                <div id="installation-components" class="ata-grid">
+                    <button id="folders" class="ata-btn ata-small" :class="{'btn-enabled': installationState[1]}"> Folders </button>
+                    <button id="executable" class="ata-btn ata-small" :class="{'btn-enabled': installationState[0]}"> Executable </button>
+                    <button id="data" class="ata-btn ata-small" :class="{'btn-enabled': installationState[2]}"> Data File </button>
+                    <button id="settings" class="ata-btn ata-small" :class="{'btn-enabled': installationState[3]}"> Settings File </button>
+                </div>
+                <p> Click any of the buttons to<br>reinstall/reset that component </p>
             </div>
-            <div id="ui-selection" class="ata-flex-column ata-centered-content">
-                <button id="select" class="ata-btn">
-                    Select UI
-                </button>
-                <p>{{ selectedUI }}</p>
+            <div id="style-selection" class="ata-flex-column ata-centered-content">
+                <h2> {{ selectedStyle }} </h2>
+                <List />
             </div>
-        </div>
-        <div id="launcher" class="ata-centered-content"
-        v-if="installationState === 'Everything is Installed'">
-            <button id="launch" class="ata-btn">
-                LAUNCH ATA
-            </button>
-        </div>
-        <div v-else class="ata-centered-content">
-            <h2 class="ata-colors-critical"> SOMETHING IS WRONG<br>FIX YOUR ATA INSTALLATION </h2>
         </div>
     </main>
+
+    <div id="launch" class="ata-centered-content">
+        <button class="ata-btn ata-colors-others">
+            <h3> LAUNCH ATA </h3>
+        </button>
+    </div>
+        
 </div>
 </template>
 
@@ -66,50 +67,55 @@ onMounted(async () => {
     overflow: hidden;
 }
 
-#install, #select, #launch {
-    background-color: transparent;
-    color: $ata-black;
+#features {
+    display: flex;
+    
+    width: 100%;
+    height: 100%;
+
+    align-items: top;
 }
 
-#features {
-    width: 100%;
-    height: 50vh;
-}
-.installation, #ui-selection {
+#installation-state {
     width: 50%;
 }
-#install, #select {
-    padding: 15px;
-    
-    border: 2px solid $ata-accent;
-
-    font-size: 1.25em;
+#installation-components {
+    grid-template-areas: 
+        "folders executable"
+        "data settings";
 }
-#install:hover, #select:hover {
-    background-color: $ata-accent;
-    color: $ata-main;
-    border: 2px solid $ata-black;
-}
+#executable { grid-area: executable;}
+#folders { grid-area: folders;}
+#data {grid-area: data;}
+#settings {grid-area: settings;}
 
-#launcher {
-    height: 50vh;
+.btn-enabled {
+    background-color: $ata-accent-tertiary;
+    color: $ata-black
 }
-#launch {
-    width: 40%;
-    height: 40%;
-
-    border: 2px solid $ata-accent-secondary;
-
-    font-size: 1.5em;
-    font-weight: bold;
-}
-#launch:hover {
+.btn-disalbed {
     background-color: $ata-accent-secondary;
-    color: $ata-accent-tertiary;
-    border: 2px solid $ata-black;
+    color: $ata-black
+}
+
+#style-selection {
+    width: 50%;
+}
+
+#launch {
+    height: 20%;
 }
 
 
+
+.ata-page {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
 
 .ata-header {
     display: flex;
@@ -123,6 +129,9 @@ onMounted(async () => {
 .ata-title {
     font-size: 40px;
 }
+.ata-title.subtitle {
+    font-size: 25px;
+}
 
 .ata-main {
     display: flex;
@@ -134,16 +143,99 @@ onMounted(async () => {
     gap: 10px;
 }
 
+.ata-footer {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    
+    width: 100%;
+    
+    justify-content: center;
+    align-items: center;
+    
+    background-color: $ata-accent-secondary;
+    color: $ata-black;
+}
+
 .ata-btn {
-    border-radius: 5px;
+    border-radius: 15px;
 
     cursor: pointer;
+}
+.ata-btn-back {
+    border-radius: 5px;
+
+    position: absolute;
+    top: 50px;
+    left: 15px;
+    
+    width: 30px;
+    height: 30px;
+
+    background-color: $ata-accent-tertiary;
+    color: $ata-black;
+
+    cursor: pointer;   
+}
+
+.ata-grid {
+    display: grid;
+    flex-grow: 1;
+    grid-auto-flow: column;
+
+    padding: 5px 5px 5px 5px;
+    
+    gap: 10px;
+}
+
+.ata-input-text {
+    padding: 5px 5px 5px 5px;
+    
+    border-radius: 5px;
+
+    resize: none;
+}
+
+.ata-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    padding: 5px 30px 5px 10px;
+    border-radius: 5px;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpolyline points='1,1 6,7 11,1' fill='none' stroke='%23d6cab2' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+.ata-list {
+    border: 5px solid transparent;
+    border-radius: 15px;
+    
+    padding: 0;
+
+    list-style: none;
+    overflow-y: scroll;
+}
+.ata-list > * > * {
+    border-right: 4px solid $ata-black;
+    border-left: 4px solid $ata-black;
+    border-top: 2px solid $ata-black;
+    border-bottom: 2px solid $ata-black;
+}
+
+.ata-checkbox {
+    width: 30px;
+    height: 30px;
 }
 
 .ata-truncate {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-wrap: normal;
 }
 .ata-spaceless {
     margin: 0;
@@ -165,20 +257,23 @@ onMounted(async () => {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+.ata-small {
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+}
 .ata-centered-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
 }
 
 .ata-colors {
     background-color: $ata-accent;
     color: $ata-main;
 }
-.ata-colors-secondary {
-    background-color: $ata-accent-secondary;
-    color: $ata-accent-tertiary;
+.ata-colors-others {
+    background-color: $ata-accent-tertiary;
+    color: $ata-accent-secondary;
 }
 .ata-colors-critical {
     background-color: $ata-accent-secondary;

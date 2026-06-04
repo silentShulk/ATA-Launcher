@@ -12,6 +12,7 @@
   "dependencies": {
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
+    "fzf": "^0.5.2",
     "path": "^0.12.7",
     "sass": "^1.100.0",
     "url": "^0.11.4",

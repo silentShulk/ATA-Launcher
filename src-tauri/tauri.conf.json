@@ -13,9 +13,9 @@
     "windows": [
       {
         "title": "ata-launcher",
-        "width": 400,
-        "height": 600,
-        "decorations": false
+        "width": 850,
+        "height": 500,
+        "decorations": true
       }
     ],
     "security": {
