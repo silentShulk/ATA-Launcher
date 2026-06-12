@@ -6,7 +6,7 @@ use thiserror::Error;
 
 use serde_json::{Value, from_str};
 
-use crate::paths::AppPaths;
+use crate::paths::Paths;
 
 
 
@@ -21,11 +21,11 @@ pub enum StyleError {
 
 
 #[tauri::command]
-pub fn scan_for_styles(paths: State<AppPaths>) -> Result<Vec<String>, String> {
+pub fn scan_for_styles(paths: State<Paths>) -> Result<Vec<String>, String> {
     scan_for_styles_inner(&paths).map_err(|er| er.to_string())
 }
 
-fn scan_for_styles_inner(paths: &AppPaths) -> Result<Vec<String>, StyleError> {
+fn scan_for_styles_inner(paths: &Paths) -> Result<Vec<String>, StyleError> {
     let mut styles: Vec<String> = Vec::new();
 
     for entry in read_dir(&paths.uis_dir)? {
@@ -46,12 +46,12 @@ fn scan_for_styles_inner(paths: &AppPaths) -> Result<Vec<String>, StyleError> {
 }
 
 #[tauri::command]
-pub fn get_selected_style(paths: State<AppPaths>) -> Result<String, String> {
+pub fn get_selected_style(paths: State<Paths>) -> Result<String, String> {
     get_selected_style_inner(&paths).map_err(|e| e.to_string())
 }
 
-fn get_selected_style_inner(paths: &AppPaths) -> Result<String, StyleError> {
-    let contents = read_to_string(&paths.settings)?;
+fn get_selected_style_inner(paths: &Paths) -> Result<String, StyleError> {
+    let contents = read_to_string(&paths.settings_file)?;
     let settings: Value = from_str(&contents)?;
     Ok(settings["style"].as_str().unwrap_or("").to_string())
 }

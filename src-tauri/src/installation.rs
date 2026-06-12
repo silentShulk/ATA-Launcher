@@ -6,7 +6,7 @@ use thiserror::Error;
 
 use serde_json::{to_writer_pretty, json};
 
-use crate::paths::AppPaths;
+use crate::paths::Paths;
 
 
 
@@ -21,13 +21,13 @@ pub enum InstallationError {
 
 
 #[tauri::command]
-pub fn create_folders(paths: State<AppPaths>) -> Result<(), String> {
+pub fn create_folders(paths: State<Paths>) -> Result<(), String> {
     create_folders_inner(&paths).map_err(|er| er.to_string())
 }
-fn create_folders_inner(paths: &AppPaths) -> Result<(), InstallationError> {
-    create_dir_all(&paths.executable)?;
-    create_dir_all(&paths.data_file)?;
-    create_dir_all(&paths.settings)?;
+fn create_folders_inner(paths: &Paths) -> Result<(), InstallationError> {
+    create_dir_all(&paths.executable.parent().unwrap())?;
+    create_dir_all(&paths.data_file.parent().unwrap())?;
+    create_dir_all(&paths.settings_file.parent().unwrap())?;
     create_dir_all(&paths.uis_dir)?;
     create_dir_all(&paths.apps_dir)?;
 
@@ -39,14 +39,14 @@ fn create_folders_inner(paths: &AppPaths) -> Result<(), InstallationError> {
 // }
 
 #[tauri::command]
-pub fn create_default_data(paths: State<AppPaths>) -> Result<(), String> {
+pub fn create_default_data(paths: State<Paths>) -> Result<(), String> {
     create_default_data_inner(&paths).map_err(|er| er.to_string())
 }
-fn create_default_data_inner(paths: &AppPaths) -> Result<(), InstallationError> {
-    let data_path = if paths.settings.exists() {
+fn create_default_data_inner(paths: &Paths) -> Result<(), InstallationError> {
+    let data_path = if paths.data_file.exists() {
         paths.data_file.parent().unwrap().join("data_valid.json")
     } else {
-        paths.settings.clone()
+        paths.data_file.clone()
     };
 
     let data = json!({
@@ -60,14 +60,14 @@ fn create_default_data_inner(paths: &AppPaths) -> Result<(), InstallationError> 
 }
 
 #[tauri::command]
-pub fn create_default_settings(paths: State<AppPaths>) -> Result<(), String> {
+pub fn create_default_settings(paths: State<Paths>) -> Result<(), String> {
     create_default_settings_inner(&paths).map_err(|er| er.to_string())
 }
-fn create_default_settings_inner(paths: &AppPaths) -> Result<(), InstallationError> {
-    let settings_path = if paths.settings.exists() {
-        paths.settings.parent().unwrap().join("settings_valid.json")
+fn create_default_settings_inner(paths: &Paths) -> Result<(), InstallationError> {
+    let settings_path = if paths.settings_file.exists() {
+        paths.settings_file.parent().unwrap().join("settings_valid.json")
     } else {
-        paths.settings.clone()
+        paths.settings_file.clone()
     };
 
     let settings = json!({

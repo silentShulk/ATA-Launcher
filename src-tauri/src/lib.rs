@@ -3,7 +3,7 @@ mod checks;
 mod style;
 mod installation;
 
-use paths::AppPaths;
+use paths::Paths;
 use checks::check_installation_state;
 use style::{scan_for_styles, get_selected_style};
 use installation::{
@@ -18,11 +18,12 @@ use installation::{
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .manage(AppPaths::new())
+        .manage(Paths::new())
         .invoke_handler(tauri::generate_handler![
             check_installation_state,
-            get_selected_style,
+            
             scan_for_styles,
+            get_selected_style,
             
             create_folders,
             create_default_data,

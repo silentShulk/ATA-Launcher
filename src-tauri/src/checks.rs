@@ -1,8 +1,8 @@
 use tauri::State;
-use crate::paths::AppPaths;
+use crate::paths::Paths;
 
 #[tauri::command]
-pub fn check_installation_state(paths: State<AppPaths>) -> (bool, bool, bool, bool) {
+pub fn check_installation_state(paths: State<Paths>) -> (bool, bool, bool, bool) {
     let folders  = are_folders_present(&paths);
     let ata      = is_executable_present(&paths);
     let data     = is_data_present(&paths);
@@ -11,22 +11,22 @@ pub fn check_installation_state(paths: State<AppPaths>) -> (bool, bool, bool, bo
     (folders, ata, data, settings)
 }
 
-fn are_folders_present(paths: &AppPaths) -> bool {
+fn are_folders_present(paths: &Paths) -> bool {
     paths.data_file.parent().map_or(false, |p| p.exists())
-        && paths.settings.parent().map_or(false, |p| p.exists())
+        && paths.settings_file.parent().map_or(false, |p| p.exists())
         && paths.uis_dir.exists()
         && paths.apps_dir.exists()
         && paths.executable.parent().map_or(false, |p| p.exists())
 }
 
-fn is_executable_present(paths: &AppPaths) -> bool {
+fn is_executable_present(paths: &Paths) -> bool {
     paths.executable.exists()
 }
 
-fn is_data_present(paths: &AppPaths) -> bool {
+fn is_data_present(paths: &Paths) -> bool {
     paths.data_file.exists()
 }
 
-fn is_settings_present(paths: &AppPaths) -> bool {
-    paths.settings.exists()
+fn is_settings_present(paths: &Paths) -> bool {
+    paths.settings_file.exists()
 }

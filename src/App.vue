@@ -8,6 +8,22 @@ import List from "./Components/List.vue";
 const installationState = ref<[boolean, boolean, boolean, boolean]>([false, false, false, false]);
 const selectedStyle = ref("");
 
+async function createFolders() {
+    await invoke("create_folders")
+
+    installationState.value = await invoke("check_installation_state")
+}
+async function createDefaultData() {
+    await invoke("create_default_data")
+
+    installationState.value = await invoke("check_installation_state")
+}
+async function createDefaultSettings() {
+    await invoke("create_default_settings")
+
+    installationState.value = await invoke("check_installation_state")
+}
+
 onMounted(async () => {
     installationState.value = await invoke("check_installation_state");
 
@@ -28,10 +44,14 @@ onMounted(async () => {
             <div id="installation-state" class="ata-flex-column ata-centered-content">
                 <h2> State of ATA<br>installation </h2>
                 <div id="installation-components" class="ata-grid">
-                    <button id="folders" class="ata-btn ata-small" :class="{'btn-enabled': installationState[1]}"> Folders </button>
-                    <button id="executable" class="ata-btn ata-small" :class="{'btn-enabled': installationState[0]}"> Executable </button>
-                    <button id="data" class="ata-btn ata-small" :class="{'btn-enabled': installationState[2]}"> Data File </button>
-                    <button id="settings" class="ata-btn ata-small" :class="{'btn-enabled': installationState[3]}"> Settings File </button>
+                    <button id="folders" class="ata-btn ata-small" :class="{'btn-enabled': installationState[0]}"
+                    @click="createFolders()"> Folders </button>
+                    <button id="executable" class="ata-btn ata-small" :class="{'btn-enabled': installationState[1]}"
+                    > Executable </button>
+                    <button id="data" class="ata-btn ata-small" :class="{'btn-enabled': installationState[2]}"
+                    @click="createDefaultData()"> Data File </button>
+                    <button id="settings" class="ata-btn ata-small" :class="{'btn-enabled': installationState[3]}"
+                    @click="createDefaultSettings()"> Settings File </button>
                 </div>
                 <p> Click any of the buttons to<br>reinstall/reset that component </p>
             </div>
