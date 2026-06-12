@@ -19,7 +19,7 @@ onMounted(async () => {
 
 
 <template>
-<div id="app">
+<div id="ata-app">
     <header class="ata-header">
         <h1 class="ata-title"> ATA Launcher </h1>
     </header>
@@ -38,7 +38,7 @@ onMounted(async () => {
     </main>
 
     <div id="launch" class="ata-centered-content">
-        <button class="ata-btn-small ata-border-radius ata-colors-critical">
+        <button class="ata-btn-small ata-border-radius ata-colors-black">
             <h3> LAUNCH ATA </h3>
         </button>
     </div>
@@ -49,7 +49,7 @@ onMounted(async () => {
 
 
 <style lang="scss">
-#app {
+#ata-app {
     display: flex;
     flex-direction: column;    
     
@@ -114,13 +114,13 @@ onMounted(async () => {
     flex-grow: 1;
     grid-auto-flow: column;
 
-    padding: 5px 5px 5px 5px;
-    
     gap: 10px;
 }
 
 .ata-input-text {
     padding: 5px 5px 5px 5px;
+
+    font-size: 1em;
     
     resize: none;
 }
@@ -128,6 +128,9 @@ onMounted(async () => {
 .ata-list {
     list-style: none;
     overflow-y: scroll;
+}
+.ata-list-item {
+    border: 3px solid $ata-black;
 }
 
 .ata-truncate {
@@ -159,12 +162,6 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     gap: 5px;
-}
-.ata-centered {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 .ata-centered-content {
     display: flex;
@@ -213,9 +210,15 @@ onMounted(async () => {
 
     border: 5px solid $ata-accent-secondary-dark;
     
-    box-shadow: $ata-accent-secondary-dark 0px 5px 15px 5px;
+    box-shadow: $ata-accent-secondary-dark 0 5px 15px 5px;
+}
+.ata-colors-black {
+    background-color: $ata-black-light;
+    color: white;
 
-    
+    border : 5px solid $ata-black;
+
+    box-shadow: $ata-black 0 2px 5px 2px;
 }
 .ata-colors-enabled {
     background-color: $ata-accent-tertiary;

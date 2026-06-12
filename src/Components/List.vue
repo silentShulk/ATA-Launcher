@@ -39,21 +39,23 @@ onMounted(async () => {
 
 
 <template>
-<main id="selector" class="ata-main ata-flex-column">
+<main id="selector" class="ata-main ata-flex-column ata-border-radius ata-centered-content" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
     <input 
+        id="style-filterer"
         class="ata-input-text ata-border-radius ata-colors-accent"
         placeholder="Search style..."
         @input="(e) => filter(e)"
     />
-    <ul class="ata-list ata-spaceless ata-border-radius" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
-        <li class="ata-colors ata-border" v-for="(style) in filteredStyles" :key="style">
-            <label class="ata-btn ata-flex ata-centered-content" :class="isSelected(style) ? 'selected-style' : ''">
-                <input 
+    <ul id="style-list"class="ata-list ata-spaceless ata-border-radius">
+        <li id="style" class="ata-colors ata-centered-content ata-border-radius ata-list-item" v-for="(style) in filteredStyles" :key="style">
+            <label id="style" class="ata-btn ata-flex ata-centered-content ata-border" :class="isSelected(style) ? 'selected-style' : ''">
+                <input
+                    class="ata-button"
                     type="radio" 
                     :checked="isSelected(style)" 
                     @change="selectStyle(style)"
                 />
-                <span>
+                <span class="ata-truncate">
                     {{ style }}
                 </span>
             </label>
@@ -65,8 +67,32 @@ onMounted(async () => {
 
 
 <style scoped lang="scss">
+#style-filterer {
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    width: 95%
+}
+#style-list {
+    margin-top: 0;
+    padding-top: 0;
+
+    width: 100%
+}
+
 .gradient-border {
-    background: linear-gradient(transparent) padding-box,
-                linear-gradient(180deg, $ata-main 0%, $ata-main 20%, $ata-accent 100%) border-box;
+    border: 5px solid transparent; 
+
+    background-image: 
+        linear-gradient($ata-main, $ata-accent-dark), 
+        linear-gradient(180deg, $ata-main 0%, $ata-accent-dark 100%);
+    
+    background-clip: padding-box, border-box;
+    
+    background-origin: padding-box, border-box;
+}
+
+#style {
+    padding: 2px 0 2px 0;
 }
 </style>
