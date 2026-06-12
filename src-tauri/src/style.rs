@@ -1,10 +1,10 @@
-use std::fs::{read_dir, read_to_string};
+use std::fs::{read_dir, read_to_string, File};
 
 use tauri::State;
 
 use thiserror::Error;
 
-use serde_json::{Value, from_str};
+use serde_json::{Value, from_str, to_writer_pretty};
 
 use crate::paths::Paths;
 
@@ -49,9 +49,24 @@ fn scan_for_styles_inner(paths: &Paths) -> Result<Vec<String>, StyleError> {
 pub fn get_selected_style(paths: State<Paths>) -> Result<String, String> {
     get_selected_style_inner(&paths).map_err(|e| e.to_string())
 }
-
 fn get_selected_style_inner(paths: &Paths) -> Result<String, StyleError> {
     let contents = read_to_string(&paths.settings_file)?;
     let settings: Value = from_str(&contents)?;
     Ok(settings["style"].as_str().unwrap_or("").to_string())
+}
+
+#[tauri::command]
+pub fn set_selected_style(selected_style: String, paths: State<Paths>) -> Result<(), String> {
+    set_selected_style_inner(selected_style, &paths).map_err(|er| er.to_string())
+}
+fn set_selected_style_inner(selected_style: String, paths: &Paths) -> Result<(), StyleError> {
+    let contents = read_to_string(&paths.settings_file)?;
+    let mut settings: Value = from_str(&contents)?;
+
+    settings["style"] = Value::String(selected_style);
+    
+    let settings_file = File::create(&paths.settings_file)?;
+    to_writer_pretty(settings_file, &settings)?;
+
+    Ok(())
 }

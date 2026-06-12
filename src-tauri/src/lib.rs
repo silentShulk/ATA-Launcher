@@ -5,7 +5,7 @@ mod installation;
 
 use paths::Paths;
 use checks::check_installation_state;
-use style::{scan_for_styles, get_selected_style};
+use style::{scan_for_styles, get_selected_style, set_selected_style};
 use installation::{
     create_folders,
     create_default_data,
@@ -24,6 +24,7 @@ pub fn run() {
             
             scan_for_styles,
             get_selected_style,
+            set_selected_style,
             
             create_folders,
             create_default_data,

@@ -2,12 +2,16 @@
 import { onMounted, ref } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
 import { Fzf } from 'fzf';
+import { useStateStore } from '../stores/state';
 
 const styles = ref<string[]>([]);
 const filteredStyles = ref<string[]>([]);
-const selectedStyle = ref<string>();
 
-const filterMods = (e: Event) => {
+const props = defineProps<{
+    state: ReturnType<typeof useStateStore>
+}>()
+
+const filter = (e: Event) => {
     const fzf = new Fzf(
         styles.value,
         {
@@ -18,10 +22,12 @@ const filterMods = (e: Event) => {
     filteredStyles.value = result.map(entry => entry.item)
 };
 
-const isSelected = (style: string) => selectedStyle.value === style;
+const isSelected = (style: string) => props.state.selectedStyle === style;
 
-const selectStyle = (style: string) => {
-    selectedStyle.value = style;
+async function selectStyle(style: string) {
+    await invoke("set_selected_style", {selectedStyle: style})
+
+    props.state.selectedStyle = style;
 };
 
 onMounted(async () => {
@@ -35,16 +41,15 @@ onMounted(async () => {
 <template>
 <main id="selector" class="ata-main ata-flex-column">
     <input 
-        class="ata-input-text ata-colors"
+        class="ata-input-text ata-border-radius ata-colors-accent"
         placeholder="Search style..."
-        @input="(e) => filterMods(e)"
+        @input="(e) => filter(e)"
     />
-    <ul class="ata-list" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
-        <li v-for="(style) in filteredStyles" :key="style">
+    <ul class="ata-list ata-spaceless ata-border-radius" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
+        <li class="ata-colors ata-border" v-for="(style) in filteredStyles" :key="style">
             <label class="ata-btn ata-flex ata-centered-content" :class="isSelected(style) ? 'selected-style' : ''">
                 <input 
                     type="radio" 
-                    name="style-group"
                     :checked="isSelected(style)" 
                     @change="selectStyle(style)"
                 />
@@ -60,17 +65,8 @@ onMounted(async () => {
 
 
 <style scoped lang="scss">
-#selector {
-    width: 50%;
-    max-height: 100%;
-}
-
 .gradient-border {
     background: linear-gradient(transparent) padding-box,
                 linear-gradient(180deg, $ata-main 0%, $ata-main 20%, $ata-accent 100%) border-box;
-}
-
-.selected {
-    background-color: $ata-accent-tertiary;
 }
 </style>
