@@ -50,11 +50,10 @@ async function createDefaultSettings() {
 #installation-components {
     display: grid;
     grid-auto-flow: row;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(1, 1fr);
     grid-template-areas: 
-        "folders executable"
-        "data settings";
+        "folders executable data settings";
 }
 #executable { grid-area: executable;}
 #folders { grid-area: folders;}

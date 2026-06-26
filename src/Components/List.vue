@@ -39,7 +39,7 @@ onMounted(async () => {
 
 
 <template>
-<main id="selector" class="ata-main ata-flex-column ata-border-radius ata-centered-content" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
+<main id="selector" class="ata-main ata-flex-column ata-border-radius" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
     <input 
         id="style-filterer"
         class="ata-input-text ata-border-radius ata-colors-accent"

@@ -1,0 +1,71 @@
+$ata-main: #d6cab2;
+
+$ata-accent: #706857;
+$ata-accent-dark: #504635;
+
+$ata-accent-secondary: #c76248;
+$ata-accent-tertiary: #6eb2a3;
+
+$ata-accent-secondary-dark: #b65135;
+$ata-accent-tertiary-dark: #5da192;
+
+$ata-dark: #101429;
+$ata-dark-light: #21253a;
+
+
+
+.palette-main {
+    background-color: $ata-main;
+    color: $ata-accent;
+}
+.palette-accent {
+    background-color: $ata-accent;
+    color: $ata-main;
+
+    border-color: $ata-accent-dark
+}
+
+.palette-secondary {
+    background-color: $ata-accent-secondary;
+    color: $ata-accent-tertiary;
+
+    border-color: $ata-accent-secondary-dark;
+}
+.palette-tertiary {
+    background-color: $ata-accent-tertiary;
+    color: $ata-accent-secondary;
+
+    border-color: $ata-accent-tertiary-dark;
+}
+
+.palette-disabled {
+    background-color: $ata-accent-secondary;
+    color: $ata-dark;
+
+    border-color: $ata-accent-secondary-dark;
+}
+.palette-enabled {
+    background-color: $ata-accent-secondary;
+    color: $ata-dark;
+
+    border-color: $ata-accent-tertiary-dark;
+}
+
+.palette-dark-bad {
+    background-color: $ata-dark-light;
+    color: $ata-accent-secondary;
+
+    border-color: $ata-dark;
+}
+.palette-dark-good {
+    background-color: $ata-dark-light;
+    color: $ata-accent-tertiary;
+
+    border-color: $ata-dark;
+}
+
+.palette-gradient-main-accent {
+    background: linear-gradient(to down, $ata-main, $ata-accent);
+
+    border-color: $ata-accent-dark;
+}

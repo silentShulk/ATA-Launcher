@@ -1,9 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import List from "./Components/List.vue";
 import InstallationState from "./Components/InstallationState.vue";
 import { useStateStore } from "./stores/state"
+import TitleBar from "./TitleBar.vue";
 
 
 
@@ -19,30 +20,21 @@ onMounted(async () => {
 
 
 <template>
+<TitleBar/>
 <div id="ata-app">
     <header class="ata-header">
         <h1 class="ata-title"> ATA Launcher </h1>
     </header>
 
-    <main class="ata-main">
-        <div id="features" class="ata-flex">
-            <div id="installation-state" class="ata-flex-column ata-centered-content">
-                <h2 class="ata-spaceless"> State of ATA<br>installation </h2>
-                <InstallationState :state="stateStore" />
-            </div>
-            <div id="style-selection" class="ata-flex-column ata-centered-content">
-                <h2> {{ stateStore.selectedStyle }} </h2>
-                <List :state="stateStore" />
-            </div>
+    <InstallationState :state="stateStore" />
+    
+    <main class="ata-main ata-flex">
+        <button class="ata-btn ata-colors-black ata-border-radius ata-centered-content"></button>
+        <div id="style-selection">
+            <List :state="stateStore"/>
         </div>
+        <button class="ata-btn ata-colors-black ata-border-radius"></button>
     </main>
-
-    <div id="launch" class="ata-centered-content">
-        <button class="ata-btn-small ata-border-radius ata-colors-black">
-            <h3> LAUNCH ATA </h3>
-        </button>
-    </div>
-        
 </div>
 </template>
 
@@ -61,12 +53,8 @@ onMounted(async () => {
 
     overflow: hidden;
 }
-#features {
-    width: 100%;
-    height: 100%;
-}
-#installation-state, #style-selection {
-    width: 50%;
+#style-selection {
+    width: 60%;
     max-height: 100%;
 }
 #launch {
@@ -130,7 +118,7 @@ onMounted(async () => {
     overflow-y: scroll;
 }
 .ata-list-item {
-    border: 3px solid $ata-black;
+    border: 3px solid $ata-dark;
 }
 
 .ata-truncate {
@@ -147,10 +135,10 @@ onMounted(async () => {
     border-radius: 15px;
 }
 .ata-shadow {
-    box-shadow: 0 1px 2px 1px $ata-black;
+    box-shadow: 0 1px 2px 1px $ata-dark;
 
     &:hover {
-        box-shadow: 0 1px 2px 1px $ata-black, 0 2px 3px 2px $ata-black-light;
+        box-shadow: 0 1px 2px 1px $ata-dark, 0 2px 3px 2px $ata-dark-light;
     }
 }
 .ata-flex {
@@ -206,23 +194,23 @@ onMounted(async () => {
 }
 .ata-colors-critical {
     background-color: $ata-accent-secondary;
-    color: $ata-black;
+    color: $ata-dark;
 
     border: 5px solid $ata-accent-secondary-dark;
     
     box-shadow: $ata-accent-secondary-dark 0 5px 15px 5px;
 }
 .ata-colors-black {
-    background-color: $ata-black-light;
+    background-color: $ata-dark-light;
     color: white;
 
-    border : 5px solid $ata-black;
+    border : 5px solid $ata-dark;
 
-    box-shadow: $ata-black 0 2px 5px 2px;
+    box-shadow: $ata-dark 0 2px 5px 2px;
 }
 .ata-colors-enabled {
     background-color: $ata-accent-tertiary;
-    color: $ata-black;
+    color: $ata-dark;
 
     border: 5px solid $ata-accent-tertiary-dark;
 
@@ -232,7 +220,7 @@ onMounted(async () => {
 }
 .ata-colors-disabled {
     background-color: $ata-accent-secondary;
-    color: $ata-black;
+    color: $ata-dark;
 
     border: 5px solid $ata-accent-secondary-dark;
 
