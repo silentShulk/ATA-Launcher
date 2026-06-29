@@ -37,7 +37,8 @@ export default defineConfig(async () => ({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "${resolve(__dirname, 'src/style/colors')}" as *;`
+        additionalData: `@use "${resolve(__dirname, 'src/style/colors')}" as *;
+                        @use "${resolve(__dirname, 'src/style/typography')}" as *;`
       },
     },
   },

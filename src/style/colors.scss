@@ -22,7 +22,11 @@ $ata-dark-light: #21253a;
     background-color: $ata-accent;
     color: $ata-main;
 
-    border-color: $ata-accent-dark
+    border-color: $ata-accent-dark;
+
+    &:hover {
+        background-color: $ata-accent-dark;
+    }
 }
 
 .palette-secondary {
@@ -43,12 +47,20 @@ $ata-dark-light: #21253a;
     color: $ata-dark;
 
     border-color: $ata-accent-secondary-dark;
+
+    &:hover {
+        background-color: $ata-accent-secondary-dark;
+    }
 }
 .palette-enabled {
-    background-color: $ata-accent-secondary;
+    background-color: $ata-accent-tertiary;
     color: $ata-dark;
 
     border-color: $ata-accent-tertiary-dark;
+
+    &:hover {
+        background-color: $ata-accent-tertiary-dark;
+    }
 }
 
 .palette-dark-bad {
@@ -65,7 +77,7 @@ $ata-dark-light: #21253a;
 }
 
 .palette-gradient-main-accent {
-    background: linear-gradient(to down, $ata-main, $ata-accent);
+    background: linear-gradient(to bottom, $ata-main, $ata-accent);
 
     border-color: $ata-accent-dark;
 }

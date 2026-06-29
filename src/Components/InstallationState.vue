@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { invoke } from '@tauri-apps/api/core'
 import { useStateStore } from '../stores/state'
+import "../style/components/button.scss"
 
 
 
@@ -29,17 +30,17 @@ async function createDefaultSettings() {
 
 <template>
     <div id="installation-components" class="ata-grid">
-        <button id="folders" class="ata-btn ata-border-radius ata-shadow"
-            :class="{ 'ata-colors-enabled': props.state.installationState[0], 'ata-colors-disabled': !props.state.installationState[0] }"
+        <button id="folders" class="ata-btn-medium-small"
+            :class="{ 'palette-enabled': props.state.installationState[0], 'palette-disabled': !props.state.installationState[0] }"
             @click="createFolders()"> Folders </button>
-        <button id="executable" class="ata-btn ata-border-radius ata-shadow"
-            :class="{ 'ata-colors-enabled': props.state.installationState[1], 'ata-colors-disabled': !props.state.installationState[1] }"> Executable
+        <button id="executable" class="ata-btn-medium-small"
+            :class="{ 'palette-enabled': props.state.installationState[1], 'palette-disabled': !props.state.installationState[1] }"> Executable
         </button>
-        <button id="data" class="ata-btn ata-border-radius ata-shadow"
-            :class="{ 'ata-colors-enabled': props.state.installationState[2], 'ata-colors-disabled': !props.state.installationState[2] }"
+        <button id="data" class="ata-btn-medium-small"
+            :class="{ 'palette-enabled': props.state.installationState[2], 'palette-disabled': !props.state.installationState[2] }"
             @click="createDefaultData()"> Data File </button>
-        <button id="settings" class="ata-btn ata-border-radius ata-shadow"
-            :class="{ 'ata-colors-enabled': props.state.installationState[3], 'ata-colors-disabled': !props.state.installationState[3] }"
+        <button id="settings" class="ata-btn-medium-small"
+            :class="{ 'palette-enabled': props.state.installationState[3], 'palette-disabled': !props.state.installationState[3] }"
             @click="createDefaultSettings()"> Settings File </button>
     </div>
 </template>

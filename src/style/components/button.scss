@@ -1,69 +1,44 @@
-// BUTTONS
-.ata-btn-big {
-    width: 640px;
-    height: 360px;
+%ata-btn-base {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 
     border-width: 5px;
     border-style: solid;
     border-radius: 15px;
-
     box-shadow: 0 5px 5px 2px $ata-dark-light;
 
-    text-align: center;
-    align-items: center;
+    cursor: pointer;
+}
+
+// BUTTON VARIATIONS
+.ata-btn-big {
+    @extend %ata-btn-base;
+    width: 640px;
+    height: 360px;
 }
 
 .ata-btn-medium-big {
+    @extend %ata-btn-base;
     width: 160px;
     height: 90px;
-
-    border-width: 5px;
-    border-style: solid;
-    border-radius: 15px;
-
-    box-shadow: 0 5px 5px 2px $ata-dark-light;
-    
-    text-align: center;
-    align-items: center;
 }
+
 .ata-btn-medium-small {
+    @extend %ata-btn-base;
     width: 120px;
     height: 67.5px;
-
-    border-width: 5px;
-    border-style: solid;
-    border-radius: 15px;
-
-    box-shadow: 0 5px 5px 2px $ata-dark-light;
-    
-    text-align: center;
-    align-items: center;
 }
 
 .ata-btn-long {
+    @extend %ata-btn-base;
     width: 160px;
     height: 45px;
-
-    border-width: 5px;
-    border-style: solid;
-    border-radius: 15px;
-
-    box-shadow: 0 5px 5px 2px $ata-dark-light;
-    
-    text-align: center;
-    align-items: center;
 }
 
 .ata-btn-small {
+    @extend %ata-btn-base;
     width: 64px;
     height: 36px;
-
-    border-width: 5px;
-    border-style: solid;
-    border-radius: 15px;
-
-    box-shadow: 0 5px 5px 2px $ata-dark-light;
-    
-    text-align: center;
-    align-items: center;
 }

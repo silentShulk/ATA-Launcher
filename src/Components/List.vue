@@ -3,6 +3,9 @@ import { onMounted, ref } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
 import { Fzf } from 'fzf';
 import { useStateStore } from '../stores/state';
+import "../style/components/select.scss"
+
+
 
 const styles = ref<string[]>([]);
 const filteredStyles = ref<string[]>([]);
@@ -39,10 +42,10 @@ onMounted(async () => {
 
 
 <template>
-<main id="selector" class="ata-main ata-flex-column ata-border-radius" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
+<main id="selector" class="ata-select-big" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
     <input 
         id="style-filterer"
-        class="ata-input-text ata-border-radius ata-colors-accent"
+        class="ata-input-big-top palette-accent"
         placeholder="Search style..."
         @input="(e) => filter(e)"
     />
@@ -67,6 +70,10 @@ onMounted(async () => {
 
 
 <style scoped lang="scss">
+#selector {
+    height: 90%;
+}
+
 #style-filterer {
     margin-bottom: 0;
     padding-bottom: 0;
