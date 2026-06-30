@@ -2,11 +2,11 @@
 .ata-input-small {
     width: 180px;
     height: 45px;
-
+ 
     border-width: 5px;
     border-style: solid;
     border-radius: 15px;
-
+ 
     box-shadow: 0 5px 5px 2px $ata-dark-light;
     
     text-align: center;
@@ -15,60 +15,61 @@
 .ata-input-small-top {
     width: 180px;
     height: 45px;
-
+ 
     border-width: 5px;
     border-style: solid;
     border-radius: 15px 15px 0px 0px;
-
+ 
     text-align: center;
     align-items: center;
 }
-
+ 
 .ata-input-big {
     width: 360px;
     height: 90px;
-
+ 
     border-width: 5px;
     border-style: solid;
     border-radius: 15px;
-
+ 
     box-shadow: 0 5px 5px 2px $ata-dark-light;
     
     text-align: center;
     align-items: center;
 }
 .ata-input-big-top {
+    box-sizing: border-box;
     width: 360px;
     height: 90px;
-
-    border-width: 5px;
+ 
+    border-width: 0 0 5px 0;
     border-style: solid;
-    border-radius: 15px 15px 0px 0px;
-
+    border-radius: 10px 10px 0px 0px;
+ 
     text-align: center;
     align-items: center;
 }
-
-
-
+ 
+ 
+ 
 // TEXTAREA
 .ata-textarea-small {
     width: 160px;
     height: 90px;
-
+ 
     border-width: 5px;
     border-style: solid;
     border-radius: 5px;
-
+ 
     box-shadow: 0 3px 3px 2px $ata-dark-light;
 }
 .ata-textarea-big {
     width: 320px;
     height: 90px;
-
+ 
     border-width: 5px;
     border-style: solid;
     border-radius: 5px;
-
+ 
     box-shadow: 0 3px 3px 2px $ata-dark-light;
 }

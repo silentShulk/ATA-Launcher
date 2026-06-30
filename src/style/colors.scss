@@ -63,6 +63,16 @@ $ata-dark-light: #21253a;
     }
 }
 
+.palette-dark-empty {
+    background-color: transparent;
+    color: floralwhite;
+
+    border-color: $ata-dark;
+
+    &:checked {
+        background-color: $ata-dark-light;
+    }
+}
 .palette-dark-bad {
     background-color: $ata-dark-light;
     color: $ata-accent-secondary;

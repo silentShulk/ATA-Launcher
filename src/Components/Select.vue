@@ -43,26 +43,21 @@ onMounted(async () => {
 
 
 <template>
-<main id="selector" class="ata-select-big">
+<main id="selector" class="ata-select-big palette-gradient-main-accent">
     <input 
-        id="style-filterer"
-        class="ata-input-big-top palette-accent"
-        placeholder="Search style..."
+        class="ata-input-big-top palette-accent ata-h1"
+        placeholder="Search style"
         @input="(e) => filter(e)"
     />
-    <ul id="style-list"class="ata-list ata-spaceless ata-border-radius">
-        <li id="style" class="ata-colors ata-centered-content ata-border-radius ata-list-item" v-for="(style) in filteredStyles" :key="style">
-            <label id="style" class="ata-btn ata-flex ata-centered-content ata-border" :class="isSelected(style) ? 'selected-style' : ''">
-                <input
-                    class="ata-button"
-                    type="radio" 
-                    :checked="isSelected(style)" 
-                    @change="selectStyle(style)"
-                />
-                <span class="ata-truncate">
-                    {{ style }}
-                </span>
-            </label>
+    <ul class="justify-center">
+        <li v-for="style in styles" class="listless">
+            <input
+                class="ata-option-big palette-dark-empty listless"
+                type="radio" 
+                :checked="isSelected(style)" 
+                @change="selectStyle(style)"
+            />
+            <span> {{style}} </span>
         </li>
     </ul>
 </main>
@@ -72,19 +67,10 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 #selector {
-    height: 90%;
+    max-height: 90%;
 }
 
-#style-filterer {
-    margin-bottom: 0;
-    padding-bottom: 0;
-
-    width: 95%
-}
-#style-list {
-    margin-top: 0;
-    padding-top: 0;
-
-    width: 100%
+.listless {
+    list-style: none;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
-import List from "./Components/List.vue";
+import Select from "./Components/Select.vue";
 import InstallationState from "./Components/InstallationState.vue";
 import { useStateStore } from "./stores/state"
 import TitleBar from "./TitleBar.vue";
@@ -32,7 +32,7 @@ onMounted(async () => {
         <main id="style" class="ata-main justify-space-evenly">
             <button class="ata-btn-medium-big palette-dark-bad ata-h2 centered-self-v"> Remove Style</button>
             <div id="style-selector">
-                <List :state="stateStore" />
+                <Select state="stateStore" />
             </div>
             <button class="ata-btn-medium-big palette-dark-good ata-h2 centered-self-v"> Add Style </button>
         </main>
@@ -104,11 +104,9 @@ onMounted(async () => {
 }
 
 .justify-center {
-    display: flex;
     justify-content: center;
 }
 .justify-space-evenly {
-    display: flex;
     justify-content: space-evenly;
 }
 .centered-self-v {

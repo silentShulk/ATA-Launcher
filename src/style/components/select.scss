@@ -20,6 +20,8 @@
 
 // OPTION
 .ata-option-small {
+    appearance: none;
+    -webkit-appearance: none;
     width: 170px;
     height: 45px;
 
@@ -29,8 +31,11 @@
 
     text-align: center;
     align-items: center;
+    cursor: pointer;
 }
 .ata-option-big {
+    appearance: none;
+    -webkit-appearance: none;
     width: 350px;
     height: 90px;
 
@@ -40,4 +45,5 @@
 
     text-align: center;
     align-items: center;
+    cursor: pointer;
 }

@@ -28,17 +28,25 @@ pub fn scan_for_styles(paths: State<Paths>) -> Result<Vec<String>, String> {
 fn scan_for_styles_inner(paths: &Paths) -> Result<Vec<String>, StyleError> {
     let mut styles: Vec<String> = Vec::new();
 
-    for entry in read_dir(&paths.uis_dir)? {
+    for entry in std::fs::read_dir(&paths.uis_dir)? {
         let entry = entry?;
-        if entry.path().is_file() {
-            styles.push(entry.file_name().to_string_lossy().into_owned());
+        let path = entry.path();
+        if path.is_file() {
+            if let Some(stem) = path.file_stem() {
+                let s = stem.to_string_lossy().into_owned();
+                styles.push(s);
+            }
         }
     }
 
     for entry in read_dir(&paths.apps_dir)? {
         let entry = entry?;
-        if entry.path().is_file() {
-            styles.push(entry.file_name().to_string_lossy().into_owned());
+        let path = entry.path();
+        if path.is_file() {
+            if let Some(stem) = path.file_stem() {
+                let s = stem.to_string_lossy().into_owned();
+                styles.push(s);
+            }
         }
     }
 
