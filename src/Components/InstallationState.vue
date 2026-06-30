@@ -50,9 +50,8 @@ async function createDefaultSettings() {
 <style lang="scss">
 #installation-components {
     display: grid;
-    grid-auto-flow: row;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(1, 1fr);
+    grid-template-rows: 1;
     grid-template-areas: 
         "folders executable data settings";
 }

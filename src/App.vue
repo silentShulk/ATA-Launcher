@@ -23,18 +23,18 @@ onMounted(async () => {
 <template>
     <TitleBar />
     <div id="ata-app">
-        <header class="ata-h1 palette-main">
-            <h1 class="ata-title"> ATA Launcher </h1>
+        <header class="palette-main">
+            <h1 class="spaceless ata-h1"> ATA Launcher </h1>
         </header>
 
-        <InstallationState :state="stateStore" />
+        <InstallationState :state="stateStore"/>
 
-        <main id="style" class="ata-main ata-flex ata-centered-content">
-            <button class="ata-btn-medium-big palette-dark-bad ata-h2"> Remove Style</button>
+        <main id="style" class="ata-main justify-space-evenly">
+            <button class="ata-btn-medium-big palette-dark-bad ata-h2 centered-self-v"> Remove Style</button>
             <div id="style-selector">
                 <List :state="stateStore" />
             </div>
-            <button class="ata-btn-medium-big palette-dark-good ata-h2"> Add Style </button>
+            <button class="ata-btn-medium-big palette-dark-good ata-h2 centered-self-v"> Add Style </button>
         </main>
     </div>
 </template>
@@ -56,12 +56,8 @@ onMounted(async () => {
 }
 
 #style {
-    height: 50%;
+    height: 60%;
     width: 100%;
-}
-
-.ata-title {
-    font-size: 40px;
 }
 
 .ata-main {
@@ -74,85 +70,50 @@ onMounted(async () => {
     gap: 10px;
 }
 
-.ata-btn {
-    margin: 5px;
-    padding: 15px;
-
-    cursor: pointer;
-}
-
-.ata-btn-small {
-    margin: 5px;
-    padding: 5px;
-
-    cursor: pointer;
-}
-
 .ata-grid {
     display: grid;
     flex-grow: 1;
     grid-auto-flow: column;
 
+    place-items: center;
+
     gap: 10px;
 }
 
-.ata-input-text {
-    padding: 5px 5px 5px 5px;
 
-    font-size: 1em;
-
-    resize: none;
-}
-
-.ata-list {
-    list-style: none;
-    overflow-y: scroll;
-}
-
-.ata-list-item {
-    border: 3px solid $ata-dark;
-}
-
-.ata-truncate {
+.truncate {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     word-wrap: normal;
 }
-
-.ata-spaceless {
+.spaceless {
     margin: 0;
     padding: 0;
 }
 
-.ata-border-radius {
-    border-radius: 15px;
-}
-
-.ata-shadow {
-    box-shadow: 0 1px 2px 1px $ata-dark;
-
-    &:hover {
-        box-shadow: 0 1px 2px 1px $ata-dark, 0 2px 3px 2px $ata-dark-light;
-    }
-}
-
-.ata-flex {
+.flex {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-
-.ata-flex-column {
+.flex-column {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.ata-centered-content {
+.justify-center {
     display: flex;
-    align-items: center;
     justify-content: center;
+}
+.justify-space-evenly {
+    display: flex;
+    justify-content: space-evenly;
+}
+.centered-self-v {
+    display: flex;
+    align-self: center;
 }
 
 body,

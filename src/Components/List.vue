@@ -4,6 +4,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { Fzf } from 'fzf';
 import { useStateStore } from '../stores/state';
 import "../style/components/select.scss"
+import "../style/components/text-input.scss"
 
 
 
@@ -42,7 +43,7 @@ onMounted(async () => {
 
 
 <template>
-<main id="selector" class="ata-select-big" :class="filteredStyles.length > 0 ? 'gradient-border' : ''">
+<main id="selector" class="ata-select-big">
     <input 
         id="style-filterer"
         class="ata-input-big-top palette-accent"
@@ -85,21 +86,5 @@ onMounted(async () => {
     padding-top: 0;
 
     width: 100%
-}
-
-.gradient-border {
-    border: 5px solid transparent; 
-
-    background-image: 
-        linear-gradient($ata-main, $ata-accent-dark), 
-        linear-gradient(180deg, $ata-main 0%, $ata-accent-dark 100%);
-    
-    background-clip: padding-box, border-box;
-    
-    background-origin: padding-box, border-box;
-}
-
-#style {
-    padding: 2px 0 2px 0;
 }
 </style>
