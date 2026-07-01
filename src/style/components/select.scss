@@ -29,7 +29,8 @@
     border-style: solid;
     border-radius: 15px;
 
-    text-align: center;
+    display: flex;
+    justify-content: center;
     align-items: center;
     cursor: pointer;
 }
@@ -43,7 +44,8 @@
     border-style: solid;
     border-radius: 15px;
 
-    text-align: center;
+    display: flex;
+    justify-content: center;
     align-items: center;
     cursor: pointer;
 }

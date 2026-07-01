@@ -60,7 +60,7 @@ onMounted(async () => {
     <div class="titlebar-buttons" tabindex="-1">
         <button id="minimize" @click="appWindow.minimize()" tabindex="-1">−</button>
         <button id="maximize" @click="appWindow.toggleMaximize()" tabindex="-1">□</button>
-        <button id="close" @click="appWindow.close()" tabindex="-1">✕</button>
+        <button id="close" @click="appWindow.destroy()" tabindex="-1">✕</button>
     </div>
 </div>
 </template>

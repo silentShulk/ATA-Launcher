@@ -49,15 +49,14 @@ onMounted(async () => {
         placeholder="Search style"
         @input="(e) => filter(e)"
     />
-    <ul class="justify-center">
-        <li v-for="style in styles" class="listless">
+    <ul id="style-list" class="justify-center">
+        <li v-for="style in styles" class="listless ata-option-big palette-dark-empty">
             <input
-                class="ata-option-big palette-dark-empty listless"
                 type="radio" 
                 :checked="isSelected(style)" 
                 @change="selectStyle(style)"
             />
-            <span> {{style}} </span>
+            <span class="ata-h3"> {{style}} </span>
         </li>
     </ul>
 </main>
@@ -70,7 +69,14 @@ onMounted(async () => {
     max-height: 90%;
 }
 
+#style-list {
+    padding:0;
+    margin:0;
+}
+
 .listless {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 </style>
