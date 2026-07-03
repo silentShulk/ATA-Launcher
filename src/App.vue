@@ -4,17 +4,20 @@ import { invoke } from "@tauri-apps/api/core";
 import Select from "./Components/Select.vue";
 import InstallationState from "./Components/InstallationState.vue";
 import { useStateStore } from "./stores/state"
+import { useStylesStore } from "./stores/styles"
 import TitleBar from "./TitleBar.vue";
 import "./style/components/button.scss"
 
 
 
 const stateStore = useStateStore()
+const stylesStore = useStylesStore()
 
 onMounted(async () => {
     stateStore.installationState = await invoke("check_installation_state");
 
-    stateStore.selectedStyle = await invoke("get_selected_style");
+    stylesStore.avaiableStyles = await invoke("scan_for_styles")
+    stylesStore.selectedStyle = await invoke("get_selected_style");
 });
 </script>
 
@@ -32,7 +35,7 @@ onMounted(async () => {
         <main id="style" class="ata-main justify-space-evenly">
             <button class="ata-btn-medium-big palette-dark-bad ata-h2 centered-self-v"> Remove Style</button>
             <div id="style-selector">
-                <Select state="stateStore" />
+                <Select :elements="stylesStore.avaiableStyles" :selectedElement="stylesStore.selectedStyle"/>
             </div>
             <button class="ata-btn-medium-big palette-dark-good ata-h2 centered-self-v"> Add Style </button>
         </main>

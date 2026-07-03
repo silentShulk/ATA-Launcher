@@ -2,8 +2,6 @@ use std::path::PathBuf;
 
 use dirs::{config_dir, data_local_dir, home_dir};
 
-
-
 pub struct Paths {
     pub executable: PathBuf,
     pub data_file: PathBuf,
@@ -32,7 +30,7 @@ impl Paths {
             uis_dir: data_local_dir().unwrap().join("ATA").join("UIs"),
             apps_dir: data_local_dir().unwrap().join("ATA").join("Apps"),
         };
-    
+
         #[cfg(not(any(target_os = "linux", target_os = "windows")))]
         compile_error!("ATA only supports Linux and Windows");
     }

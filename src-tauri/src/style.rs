@@ -1,14 +1,11 @@
 use std::fs::{read_dir, read_to_string, File};
 
 use tauri::State;
-
 use thiserror::Error;
 
-use serde_json::{Value, from_str, to_writer_pretty};
+use serde_json::{from_str, to_writer_pretty, Value};
 
 use crate::paths::Paths;
-
-
 
 #[derive(Error, Debug)]
 pub enum StyleError {
@@ -17,8 +14,6 @@ pub enum StyleError {
     #[error("Couldn't parse settings file. {0}")]
     Json(#[from] serde_json::Error),
 }
-
-
 
 #[tauri::command]
 pub fn scan_for_styles(paths: State<Paths>) -> Result<Vec<String>, String> {
@@ -72,7 +67,7 @@ fn set_selected_style_inner(selected_style: String, paths: &Paths) -> Result<(),
     let mut settings: Value = from_str(&contents)?;
 
     settings["style"] = Value::String(selected_style);
-    
+
     let settings_file = File::create(&paths.settings_file)?;
     to_writer_pretty(settings_file, &settings)?;
 

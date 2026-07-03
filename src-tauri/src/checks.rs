@@ -1,11 +1,11 @@
-use tauri::State;
 use crate::paths::Paths;
+use tauri::State;
 
 #[tauri::command]
 pub fn check_installation_state(paths: State<Paths>) -> (bool, bool, bool, bool) {
-    let folders  = are_folders_present(&paths);
-    let ata      = is_executable_present(&paths);
-    let data     = is_data_present(&paths);
+    let folders = are_folders_present(&paths);
+    let ata = is_executable_present(&paths);
+    let data = is_data_present(&paths);
     let settings = is_settings_present(&paths);
 
     (folders, ata, data, settings)

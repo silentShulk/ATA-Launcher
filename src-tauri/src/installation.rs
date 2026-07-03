@@ -1,14 +1,12 @@
-use std::fs::{File, create_dir_all};
+use std::fs::{create_dir_all, File};
 
 use tauri::State;
 
 use thiserror::Error;
 
-use serde_json::{to_writer_pretty, json};
+use serde_json::{json, to_writer_pretty};
 
 use crate::paths::Paths;
-
-
 
 #[derive(Error, Debug)]
 pub enum InstallationError {
@@ -16,9 +14,7 @@ pub enum InstallationError {
     DirectoryCreation(#[from] std::io::Error),
     #[error("Couldn't parse settings file. {0}")]
     Json(#[from] serde_json::Error),
-} 
-
-
+}
 
 #[tauri::command]
 pub fn create_folders(paths: State<Paths>) -> Result<(), String> {
@@ -35,7 +31,7 @@ fn create_folders_inner(paths: &Paths) -> Result<(), InstallationError> {
 }
 
 // fn get_executable() -> Result<(), InstallationError> {
-// 
+//
 // }
 
 #[tauri::command]
@@ -52,7 +48,7 @@ fn create_default_data_inner(paths: &Paths) -> Result<(), InstallationError> {
     let data = json!({
         "mods": []
     });
-    
+
     let data_file = File::create(&data_path)?;
     to_writer_pretty(data_file, &data)?;
 
@@ -65,7 +61,11 @@ pub fn create_default_settings(paths: State<Paths>) -> Result<(), String> {
 }
 fn create_default_settings_inner(paths: &Paths) -> Result<(), InstallationError> {
     let settings_path = if paths.settings_file.exists() {
-        paths.settings_file.parent().unwrap().join("settings_valid.json")
+        paths
+            .settings_file
+            .parent()
+            .unwrap()
+            .join("settings_valid.json")
     } else {
         paths.settings_file.clone()
     };
@@ -80,7 +80,7 @@ fn create_default_settings_inner(paths: &Paths) -> Result<(), InstallationError>
         "gamePath": "",
         "discordRichPresence": ""
     });
-    
+
     let settings_file = File::create(&settings_path)?;
     to_writer_pretty(settings_file, &settings)?;
 

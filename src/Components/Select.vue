@@ -1,65 +1,60 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { invoke } from '@tauri-apps/api/core';
 import { Fzf } from 'fzf';
-import { useStateStore } from '../stores/state';
-import "../style/components/select.scss"
-import "../style/components/text-input.scss"
 
 
-
-const styles = ref<string[]>([]);
-const filteredStyles = ref<string[]>([]);
 
 const props = defineProps<{
-    state: ReturnType<typeof useStateStore>
-}>()
+    elements: string[];
+    selectedElement: string;
+}>();
+
+const filteredElements = ref<string[]>(props.elements);
 
 const filter = (e: Event) => {
-    const fzf = new Fzf(
-        styles.value,
-        {
-            fuzzy: "v2"
-        })
-
-    const result = fzf.find((e.target as HTMLInputElement).value)
-    filteredStyles.value = result.map(entry => entry.item)
+    const query = (e.target as HTMLInputElement).value;
+    if (!query) {
+        filteredElements.value = props.elements;
+        return;
+    }
+    const fzf = new Fzf(props.elements, { fuzzy: 'v2' });
+    filteredElements.value = fzf.find(query).map((entry) => entry.item);
 };
 
-const isSelected = (style: string) => props.state.selectedStyle === style;
-
-async function selectStyle(style: string) {
-    await invoke("set_selected_style", {selectedStyle: style})
-
-    props.state.selectedStyle = style;
-};
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void;
+}>();
+const select = (item: string) => emit('update:modelValue', item);
 
 onMounted(async () => {
-    styles.value = await invoke('scan_for_styles');
-    filteredStyles.value = styles.value;
-});
+})
 </script>
 
 
 
 <template>
-<main id="selector" class="ata-select-big palette-gradient-main-accent">
-    <input 
-        class="ata-input-big-top palette-accent ata-h1"
-        placeholder="Search style"
-        @input="(e) => filter(e)"
+  <main id="selector" class="ata-select-big palette-gradient-main-accent">
+    <input
+      class="ata-input-big-top palette-accent ata-h1"
+      placeholder="Search style"
+      @input="filter"
     />
     <ul id="style-list" class="justify-center">
-        <li v-for="style in styles" class="listless ata-option-big palette-dark-empty">
-            <input
-                type="radio" 
-                :checked="isSelected(style)" 
-                @change="selectStyle(style)"
-            />
-            <span class="ata-h3"> {{style}} </span>
-        </li>
+      <li
+        v-for="item in filteredElements"
+        :key="item"
+        class="listless ata-option-big palette-dark-empty"
+      >
+        <input
+          type="radio"
+          name="selector-group"
+          :checked="item === selectedElement"
+          @change="select(item)"
+        />
+        <span class="ata-h3">{{ item }}</span>
+      </li>
     </ul>
-</main>
+  </main>
 </template>
 
 
