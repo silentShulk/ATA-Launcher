@@ -65,7 +65,7 @@ $ata-dark-light: #21253a;
 
 .palette-dark-empty {
     background-color: transparent;
-    color: $ata-accent-dark;
+    color: $ata-dark;
 
     border-color: $ata-dark;
 
@@ -78,12 +78,20 @@ $ata-dark-light: #21253a;
     color: $ata-accent-secondary;
 
     border-color: $ata-dark;
+
+    &:hover {
+        background-color: $ata-dark;
+    }
 }
 .palette-dark-good {
     background-color: $ata-dark-light;
     color: $ata-accent-tertiary;
 
     border-color: $ata-dark;
+
+    &:hover {
+        background-color: $ata-dark;
+    }
 }
 
 .palette-gradient-main-accent {

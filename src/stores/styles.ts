@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-export const useStylesStore = defineStore('state', () => {
+export const useStylesStore = defineStore('style', () => {
     const avaiableStyles = ref<string[]>([]);
     const selectedStyle = ref<string>("");
 

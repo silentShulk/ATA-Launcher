@@ -7,7 +7,10 @@
     border-width: 5px;
     border-style: solid;
     border-radius: 15px;
-    box-shadow: 0 5px 5px 2px $ata-dark-light;
+    box-shadow: 0 3px 3px 2px $ata-dark-light;
+    &:hover {
+        box-shadow: 0 5px 5px 2px $ata-dark;
+    }
 
     cursor: pointer;
 }

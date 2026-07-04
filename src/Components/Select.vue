@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Fzf } from 'fzf';
+import "../style/components/option.scss"
+import "../style/components/select.scss"
+import "../style/components/text-input.scss"
 
 
 
@@ -9,59 +12,60 @@ const props = defineProps<{
     selectedElement: string;
 }>();
 
-const filteredElements = ref<string[]>(props.elements);
+const query = ref('');
+
+const filteredElements = computed(() => {
+    if (!query.value) return props.elements;
+
+    const fzf = new Fzf(props.elements, {
+        selector: (e: string) => e,
+        fuzzy: "v2"
+    });
+
+    return fzf.find(query.value).map(entry => entry.item);
+});
 
 const filter = (e: Event) => {
-    const query = (e.target as HTMLInputElement).value;
-    if (!query) {
-        filteredElements.value = props.elements;
-        return;
-    }
-    const fzf = new Fzf(props.elements, { fuzzy: 'v2' });
-    filteredElements.value = fzf.find(query).map((entry) => entry.item);
+    query.value = (e.target as HTMLInputElement).value;
 };
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
+    newSelection: [selection: string]
 }>();
-const select = (item: string) => emit('update:modelValue', item);
-
-onMounted(async () => {
-})
 </script>
 
 
 
 <template>
-  <main id="selector" class="ata-select-big palette-gradient-main-accent">
+<main id="selector" class="ata-select-big palette-gradient-main-accent">
     <input
-      class="ata-input-big-top palette-accent ata-h1"
-      placeholder="Search style"
-      @input="filter"
+    class="ata-input-big-top palette-accent ata-h1"
+    placeholder="Search style"
+    @input="filter"
     />
     <ul id="style-list" class="justify-center">
-      <li
-        v-for="item in filteredElements"
-        :key="item"
+        <li
+        v-for="e in filteredElements"
+        :key="e"
         class="listless ata-option-big palette-dark-empty"
-      >
-        <input
-          type="radio"
-          name="selector-group"
-          :checked="item === selectedElement"
-          @change="select(item)"
-        />
-        <span class="ata-h3">{{ item }}</span>
-      </li>
+        >
+            <input
+            type="radio"
+            class="palette-accent"
+            :checked="e === selectedElement"
+            @change="$emit('newSelection', e)"
+            />
+            <span class="ata-h3">{{ e }}</span>
+        </li>
     </ul>
-  </main>
+</main>
 </template>
 
 
 
 <style scoped lang="scss">
 #selector {
-    max-height: 90%;
+    max-height: 95%;
 }
 
 #style-list {

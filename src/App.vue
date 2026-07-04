@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import Select from "./Components/Select.vue";
@@ -12,6 +12,10 @@ import "./style/components/button.scss"
 
 const stateStore = useStateStore()
 const stylesStore = useStylesStore()
+
+const changeSelectedStyle = (selectedStyle: string) => {
+    stylesStore.selectedStyle = selectedStyle
+}
 
 onMounted(async () => {
     stateStore.installationState = await invoke("check_installation_state");
@@ -35,7 +39,7 @@ onMounted(async () => {
         <main id="style" class="ata-main justify-space-evenly">
             <button class="ata-btn-medium-big palette-dark-bad ata-h2 centered-self-v"> Remove Style</button>
             <div id="style-selector">
-                <Select :elements="stylesStore.avaiableStyles" :selectedElement="stylesStore.selectedStyle"/>
+                <Select :elements="stylesStore.avaiableStyles" :selectedElement="stylesStore.selectedStyle" @newSelection="changeSelectedStyle"/>
             </div>
             <button class="ata-btn-medium-big palette-dark-good ata-h2 centered-self-v"> Add Style </button>
         </main>
@@ -49,13 +53,15 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
 
-    height: 100vh;
+    height: calc(100vh - 32px);
     width: 100vw;
 
     background-color: $ata-main;
     font-family: Jetbrains Mono;
 
     overflow: hidden;
+    flex: 1;         
+    min-height: 0;   
 }
 
 #style {

@@ -1,0 +1,30 @@
+.ata-option-small {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 170px;
+    height: 45px;
+
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.ata-option-big {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 350px;
+    height: 90px;
+
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
