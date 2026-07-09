@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "ata-launcher",
-        "width": 900,
-        "height": 505,
+        "width": 1000,
+        "height": 600,
         "decorations": false
       }
     ],

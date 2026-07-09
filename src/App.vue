@@ -7,21 +7,46 @@ import { useStateStore } from "./stores/state"
 import { useStylesStore } from "./stores/styles"
 import TitleBar from "./TitleBar.vue";
 import "./style/components/button.scss"
+import { open } from '@tauri-apps/plugin-dialog';
+import { commands } from "./bindings";
 
 
 
 const stateStore = useStateStore()
 const stylesStore = useStylesStore()
 
-const changeSelectedStyle = (selectedStyle: string) => {
-    stylesStore.selectedStyle = selectedStyle
+async function checks() {
+    stateStore.installationState = await invoke("check_installation_state");
+  
+    stylesStore.avaiableStyles = await invoke("scan_for_styles")
+    stylesStore.selectedStyle = await invoke("get_selected_style");
+}
+
+async function changeSelectedStyle(selectedStyle: string) {
+    await invoke('set_selected_style', { selectedStyle: selectedStyle})
+    
+    checks()
+}
+
+async function addStyle() {
+    const paths = await commands.getPaths();
+
+    const pathToNewStyle = await open({
+        multiple: false,
+        directory: true,
+        defaultPath: paths.downloads,
+        filters: [{
+            name: "",
+            extensions: ['exe']
+        }]
+    });
+    await invoke('add_style', { newStyle: pathToNewStyle })
+
+    checks()
 }
 
 onMounted(async () => {
-    stateStore.installationState = await invoke("check_installation_state");
-
-    stylesStore.avaiableStyles = await invoke("scan_for_styles")
-    stylesStore.selectedStyle = await invoke("get_selected_style");
+    checks()
 });
 </script>
 
@@ -41,7 +66,7 @@ onMounted(async () => {
             <div id="style-selector">
                 <Select :elements="stylesStore.avaiableStyles" :selectedElement="stylesStore.selectedStyle" @newSelection="changeSelectedStyle"/>
             </div>
-            <button class="ata-btn-medium-big palette-dark-good ata-h2 centered-self-v"> Add Style </button>
+            <button class="ata-btn-medium-big palette-dark-good ata-h2 centered-self-v" @click="addStyle"> Add Style </button>
         </main>
     </div>
 </template>
@@ -61,7 +86,9 @@ onMounted(async () => {
 
     overflow: hidden;
     flex: 1;         
-    min-height: 0;   
+    min-height: 0;
+
+    border: 5px solid $ata-accent;
 }
 
 #style {

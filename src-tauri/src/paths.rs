@@ -1,13 +1,21 @@
 use std::path::PathBuf;
 
-use dirs::{config_dir, data_local_dir, home_dir};
+use serde::Serialize;
 
+use tauri::State;
+
+use specta::Type;
+
+use dirs::{config_dir, data_local_dir, home_dir, download_dir};
+
+#[derive(Clone, Serialize, Type)]
 pub struct Paths {
     pub executable: PathBuf,
     pub data_file: PathBuf,
     pub settings_file: PathBuf,
     pub uis_dir: PathBuf,
     pub apps_dir: PathBuf,
+    pub downloads: PathBuf
 }
 impl Paths {
     pub fn new() -> Self {
@@ -29,9 +37,17 @@ impl Paths {
             settings_file: config_dir().unwrap().join("ATA").join("settings.json"),
             uis_dir: data_local_dir().unwrap().join("ATA").join("UIs"),
             apps_dir: data_local_dir().unwrap().join("ATA").join("Apps"),
+            downloads: download_dir().unwrap_or_else(|| PathBuf::new()),
         };
 
         #[cfg(not(any(target_os = "linux", target_os = "windows")))]
         compile_error!("ATA only supports Linux and Windows");
     }
 }
+
+#[tauri::command]
+#[specta::specta]
+pub fn get_paths(paths: State<Paths>) -> Paths {
+    paths.inner().clone()
+}
+

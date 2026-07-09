@@ -65,12 +65,18 @@ const emit = defineEmits<{
 
 <style scoped lang="scss">
 #selector {
-    max-height: 95%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
 }
 
 #style-list {
     padding:0;
     margin:0;
+
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .listless {
