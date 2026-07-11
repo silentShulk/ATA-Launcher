@@ -81,12 +81,14 @@ onMounted(async () => {
 
     background-color: floralwhite;
     padding: 0 10px 0 10px;
+
+    border-radius: 15px 15px 0 0;
 }
 
 .title {
     border: none;
     background: none;
-    font-family: JetBrains Mono;
+    font-family: "JetBrains Mono";
     font-size: 1.1em;
     font-style: italic;
     

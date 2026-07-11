@@ -33,14 +33,14 @@ async function addStyle() {
 
     const pathToNewStyle = await open({
         multiple: false,
-        directory: true,
+        directory: false,
         defaultPath: paths.downloads,
         filters: [{
             name: "",
             extensions: ['exe']
         }]
     });
-    await invoke('add_style', { newStyle: pathToNewStyle })
+    await invoke('add_style', { pathToNewStyle: pathToNewStyle })
 
     checks()
 }
@@ -89,6 +89,9 @@ onMounted(async () => {
     min-height: 0;
 
     border: 5px solid $ata-accent;
+    box-sizing: border-box;
+
+    border-radius: 0 0 15px 15px;
 }
 
 #style {

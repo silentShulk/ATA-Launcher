@@ -15,7 +15,8 @@
         "title": "ata-launcher",
         "width": 1000,
         "height": 600,
-        "decorations": false
+        "decorations": false,
+        "transparent": true
       }
     ],
     "security": {

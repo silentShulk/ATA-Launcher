@@ -9,7 +9,7 @@ mod style;
 use checks::check_installation_state;
 use installation::{create_default_data, create_default_settings, create_folders};
 use paths::{Paths, get_paths};
-use style::{get_selected_style, scan_for_styles, set_selected_style};
+use style::{get_selected_style, scan_for_styles, set_selected_style, add_style};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 
@@ -34,7 +34,8 @@ pub fn run() {
             create_folders,
             create_default_data,
             create_default_settings,
-            get_paths
+            get_paths,
+            add_style
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
