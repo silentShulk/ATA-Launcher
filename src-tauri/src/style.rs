@@ -81,9 +81,9 @@ fn set_selected_style_inner(selected_style: String, paths: &Paths) -> Result<(),
 
 #[tauri::command]
 pub fn add_style(path_to_new_style: PathBuf, paths: State<Paths>) -> Result<(), String> {
-    add_style_inner(path_to_new_style, paths).map_err(|er| er.to_string())
+    add_style_inner(path_to_new_style, &paths).map_err(|er| er.to_string())
 }
-pub fn add_style_inner(path_to_new_style: PathBuf, paths: State<Paths>) -> Result<(), StyleError> {
+fn add_style_inner(path_to_new_style: PathBuf, paths: &Paths) -> Result<(), StyleError> {
     let style_folder = path_to_new_style.parent()
         .ok_or_else(|| StyleError::ParentlessFile(path_to_new_style.clone()))?;
     let manifest_file_path = style_folder.join("manifest.toml");
@@ -91,10 +91,22 @@ pub fn add_style_inner(path_to_new_style: PathBuf, paths: State<Paths>) -> Resul
     let contents = read_to_string(manifest_file_path)?;
     let manifest: AppManifest = toml::from_str(&contents)?;
 
-    let exe_type_target_folder = manifest.get_folder_by_type(&paths);
+    let exe_type_target_folder = manifest.get_folder_by_type(paths);
     rename(&path_to_new_style, exe_type_target_folder.join(manifest.name)).map_err(|er| {
         StyleError::Io(er)
     })
+}
+
+#[tauri::command]
+pub fn remove_style(path_to_style_to_remove: PathBuf, paths: State<Paths>) -> Result<(), String> {
+    remove_style_inner(path_to_style_to_remove, &paths).map_err(|er| er.to_string()) 
+}
+fn remove_style_inner(path_to_style_to_remove: PathBuf, paths: &Paths) -> Result<(), StyleError> {
+    let Some(filename) = path_to_style_to_remove.file_name() else {
+        return Err(StyleError::ParentlessFile(path_to_style_to_remove))
+    };
+    rename(&path_to_style_to_remove, paths.downloads.join(filename))
+        .map_err(StyleError::Io)
 }
 
 #[derive(Deserialize)]
@@ -103,7 +115,7 @@ struct AppManifest {
     kind: AppType
 }
 impl AppManifest {
-    fn get_folder_by_type<'a>(&self, paths: &'a State<Paths>) -> &'a PathBuf {
+    fn get_folder_by_type<'a>(&self, paths: &'a Paths) -> &'a PathBuf {
         match self.kind {
             AppType::Webapp => &paths.uis_dir,
             AppType::App => &paths.apps_dir,

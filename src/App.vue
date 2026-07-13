@@ -44,6 +44,22 @@ async function addStyle() {
 
     checks()
 }
+async function removeStyle() {
+    const paths = await commands.getPaths();
+  
+    const pathToStyleToRemove = await open({
+        multiple: false,
+        directory: false,
+        defaultPath: paths.uis_dir,
+        filters: [{
+            name: "",
+            extensions: ['exe']
+        }]
+    });
+    await invoke('remove_style', { pathToStyleToRemove: pathToStyleToRemove })
+  
+    checks()
+}
 
 onMounted(async () => {
     checks()
@@ -62,7 +78,7 @@ onMounted(async () => {
         <InstallationState :state="stateStore"/>
 
         <main id="style" class="ata-main justify-space-evenly">
-            <button class="ata-btn-medium-big palette-dark-bad ata-h2 centered-self-v"> Remove Style</button>
+            <button class="ata-btn-medium-big palette-dark-bad ata-h2 centered-self-v" @click="removeStyle"> Remove Style</button>
             <div id="style-selector">
                 <Select :elements="stylesStore.avaiableStyles" :selectedElement="stylesStore.selectedStyle" @newSelection="changeSelectedStyle"/>
             </div>
