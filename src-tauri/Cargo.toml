@@ -29,4 +29,5 @@ specta = { version = "=2.0.0-rc.20", features = ["derive"] }
 specta-typescript = "=0.0.7"
 tauri-specta = { version = "=2.0.0-rc.20", features = ["derive", "typescript"] }
 toml = "1.1.2"
+tauri-plugin-shell = "2.3.5"
 
