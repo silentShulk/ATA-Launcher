@@ -69,8 +69,8 @@ $ata-dark-light: #21253a;
 
     border-color: $ata-dark;
 
-    &:checked {
-        background-color: $ata-dark-light;
+    &:hover {
+        box-shadow: inset 0 0 0 100px rgba(0, 0, 0, 0.2);
     }
 }
 .palette-dark-bad {
