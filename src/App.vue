@@ -80,7 +80,11 @@ onMounted(async () => {
         <main id="style" class="ata-main justify-space-evenly">
             <button class="ata-btn-medium-big palette-dark-bad ata-h2 centered-self-v" @click="removeStyle"> Remove Style</button>
             <div id="style-selector">
-                <Select :elements="stylesStore.avaiableStyles" :selectedElement="stylesStore.selectedStyle" @newSelection="changeSelectedStyle"/>
+                <Select
+                    :elements="stylesStore.avaiableStyles"
+                    :selectedElement="stylesStore.selectedStyle"
+                    @select="changeSelectedStyle"
+                />
             </div>
             <button class="ata-btn-medium-big palette-dark-good ata-h2 centered-self-v" @click="addStyle"> Add Style </button>
         </main>

@@ -10,7 +10,28 @@ const props = defineProps<{
     selectedElement: string;
 }>();
 
+const emit = defineEmits<{
+    select: [element: string];
+}>();
+
 const query = ref('');
+
+const LONG_PRESS_MS = 500;
+let pressTimer: ReturnType<typeof setTimeout> | null = null;
+
+const onPressStart = (e: string) => {
+    pressTimer = setTimeout(() => {
+        pressTimer = null;
+        emit('select', e);
+    }, LONG_PRESS_MS);
+};
+
+const onPressCancel = () => {
+    if (pressTimer) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+    }
+};
 
 const filteredElements = computed(() => {
     const base = !query.value
@@ -30,29 +51,6 @@ const filteredElements = computed(() => {
 const filter = (e: Event) => {
     query.value = (e.target as HTMLInputElement).value;
 };
-
-const emit = defineEmits<{
-    newSelection: [selection: string]
-}>();
-
-let pressTimer: ReturnType<typeof setTimeout> | null = null;
-const pressedElement = ref<string | null>(null);
-
-function startPress(e: string) {
-    pressedElement.value = e;
-    pressTimer = setTimeout(() => {
-        emit('newSelection', e);
-        pressedElement.value = null;
-        pressTimer = null;
-    }, 1500);
-}
-function cancelPress() {
-    if (pressTimer) {
-        clearTimeout(pressTimer);
-        pressTimer = null;
-    }
-    pressedElement.value = null;
-}
 </script>
 
 
@@ -68,13 +66,17 @@ function cancelPress() {
         <li
         v-for="e in filteredElements"
         :key="e"
-        class="listless ata-option-big palette-dark-empty"
-        :class="{ 'is-pressing': pressedElement === e }"
-        @mousedown="startPress(e)"
-        @mouseup="cancelPress"
-        @mouseleave="cancelPress"
+        class="listless ata-option-big"
         >
-            <span class="ata-h3">{{ e }}</span>
+            <button
+            class="palette-dark-empty li-btn"
+            @pointerdown="onPressStart(e)"
+            @pointerup="onPressCancel"
+            @pointerleave="onPressCancel"
+            @pointercancel="onPressCancel"
+            >
+                <span class="ata-h3">{{ e }}</span>
+            </button>
         </li>
     </ul>
 </main>
@@ -104,10 +106,12 @@ function cancelPress() {
     padding: 0;
 }
 
-.ata-option-big {
-    &.is-pressing {
-        box-shadow: inset 0 0 0 175px rgba($ata-dark-light, 0.75);
-        transition: box-shadow 1000ms linear;
-    }
+.li-btn {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    border: none
 }
 </style>
