@@ -16,17 +16,21 @@ const emit = defineEmits<{
 
 const query = ref('');
 
-const LONG_PRESS_MS = 500;
+const LONG_PRESS_MS = 750;
 let pressTimer: ReturnType<typeof setTimeout> | null = null;
+const pressedElement = ref<string | null>(null);
 
 const onPressStart = (e: string) => {
+    pressedElement.value = e;
     pressTimer = setTimeout(() => {
         pressTimer = null;
+        pressedElement.value = null;
         emit('select', e);
     }, LONG_PRESS_MS);
 };
 
 const onPressCancel = () => {
+    pressedElement.value = null;
     if (pressTimer) {
         clearTimeout(pressTimer);
         pressTimer = null;
@@ -70,6 +74,8 @@ const filter = (e: Event) => {
         >
             <button
             class="palette-dark-empty li-btn"
+            :class="{ selecting: pressedElement === e }"
+            :style="{ '--press-duration': LONG_PRESS_MS + 'ms' }"
             @pointerdown="onPressStart(e)"
             @pointerup="onPressCancel"
             @pointerleave="onPressCancel"
@@ -107,11 +113,15 @@ const filter = (e: Event) => {
 }
 
 .li-btn {
-    display: block;
-
     width: 100%;
     height: 100%;
 
-    border: none
+    border: none;
+    background-color: transparent;
+    transition: background-color var(--press-duration, 0.5s) ease-out;
+}
+
+.selecting {
+    background-color: rgba($ata-dark-light, 0.5);
 }
 </style>
