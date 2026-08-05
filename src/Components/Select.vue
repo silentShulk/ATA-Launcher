@@ -10,51 +10,23 @@ const props = defineProps<{
     selectedElement: string;
 }>();
 
-const emit = defineEmits<{
-    select: [element: string];
-}>();
-
 const query = ref('');
-
-const LONG_PRESS_MS = 750;
-let pressTimer: ReturnType<typeof setTimeout> | null = null;
-const pressedElement = ref<string | null>(null);
-
-const onPressStart = (e: string) => {
-    pressedElement.value = e;
-    pressTimer = setTimeout(() => {
-        pressTimer = null;
-        pressedElement.value = null;
-        emit('select', e);
-    }, LONG_PRESS_MS);
-};
-
-const onPressCancel = () => {
-    pressedElement.value = null;
-    if (pressTimer) {
-        clearTimeout(pressTimer);
-        pressTimer = null;
-    }
-};
+const fzf = computed(() => new Fzf(props.elements, {
+    selector: (e: string) => e,
+    fuzzy: "v2"
+}));
 
 const filteredElements = computed(() => {
-    const base = !query.value
-        ? props.elements
-        : new Fzf(props.elements, {
-            selector: (e: string) => e,
-            fuzzy: "v2"
-        }).find(query.value).map(entry => entry.item);
-
-    return [...base].sort((a, b) => {
-        if (a === props.selectedElement) return -1;
-        if (b === props.selectedElement) return 1;
-        return 0;
-    });
+    if (!query.value) return props.elements;
+    return fzf.value.find(query.value).map(entry => entry.item);
 });
-
 const filter = (e: Event) => {
     query.value = (e.target as HTMLInputElement).value;
 };
+
+const emit = defineEmits<{
+    newSelection: [selection: string]
+}>();
 </script>
 
 
@@ -70,19 +42,15 @@ const filter = (e: Event) => {
         <li
         v-for="e in filteredElements"
         :key="e"
-        class="listless ata-option-big"
+        class="listless ata-option-big palette-dark-empty"
         >
-            <button
-            class="palette-dark-empty li-btn"
-            :class="{ selecting: pressedElement === e }"
-            :style="{ '--press-duration': LONG_PRESS_MS + 'ms' }"
-            @pointerdown="onPressStart(e)"
-            @pointerup="onPressCancel"
-            @pointerleave="onPressCancel"
-            @pointercancel="onPressCancel"
-            >
-                <span class="ata-h3">{{ e }}</span>
-            </button>
+            <input
+            type="radio"
+            class="palette-accent"
+            :checked="e === selectedElement"
+            @change="$emit('newSelection', e)"
+            />
+            <span class="ata-h3">{{ e }}</span>
         </li>
     </ul>
 </main>
@@ -110,18 +78,5 @@ const filter = (e: Event) => {
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-.li-btn {
-    width: 100%;
-    height: 100%;
-
-    border: none;
-    background-color: transparent;
-    transition: background-color var(--press-duration, 0.5s) ease-out;
-}
-
-.selecting {
-    background-color: rgba($ata-dark-light, 0.5);
 }
 </style>

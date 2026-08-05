@@ -5,7 +5,7 @@ import Select from "./Components/Select.vue";
 import InstallationState from "./Components/InstallationState.vue";
 import { useStateStore } from "./stores/state"
 import { useStylesStore } from "./stores/styles"
-import TitleBar from "./Components/TitleBar.vue";
+import TitleBar from "./TitleBar.vue";
 import "./style/components/button.scss"
 import { open } from '@tauri-apps/plugin-dialog';
 import { commands } from "./bindings";
@@ -15,17 +15,36 @@ import { commands } from "./bindings";
 const stateStore = useStateStore()
 const stylesStore = useStylesStore()
 
-async function checks() {
+async function refreshInstallationState() {
     stateStore.installationState = await invoke("check_installation_state");
-  
+}
+
+async function refreshStyles() {
     stylesStore.avaiableStyles = await invoke("scan_for_styles")
     stylesStore.selectedStyle = await invoke("get_selected_style");
 }
 
+async function checks() {
+    await refreshInstallationState();
+    await refreshStyles();
+}
+
+async function createFolders() {
+    await invoke("create_folders")
+    await refreshInstallationState();
+}
+async function createDefaultData() {
+    await invoke("create_default_data")
+    await refreshInstallationState();
+}
+async function createDefaultSettings() {
+    await invoke("create_default_settings")
+    await refreshInstallationState();
+}
+
 async function changeSelectedStyle(selectedStyle: string) {
     await invoke('set_selected_style', { selectedStyle: selectedStyle})
-    
-    checks()
+    await refreshStyles()
 }
 
 async function addStyle() {
@@ -42,7 +61,7 @@ async function addStyle() {
     });
     await invoke('add_style', { pathToNewStyle: pathToNewStyle })
 
-    checks()
+    await refreshStyles()
 }
 async function removeStyle() {
     const paths = await commands.getPaths();
@@ -58,7 +77,7 @@ async function removeStyle() {
     });
     await invoke('remove_style', { pathToStyleToRemove: pathToStyleToRemove })
   
-    checks()
+    await refreshStyles()
 }
 
 onMounted(async () => {
@@ -75,16 +94,15 @@ onMounted(async () => {
             <h1 class="spaceless ata-h1"> ATA Launcher </h1>
         </header>
 
-        <InstallationState :state="stateStore"/>
+        <InstallationState :state="stateStore.installationState"
+            @create-folders="createFolders"
+            @create-default-data="createDefaultData"
+            @create-default-settings="createDefaultSettings" />
 
         <main id="style" class="ata-main justify-space-evenly">
             <button class="ata-btn-medium-big palette-dark-bad ata-h2 centered-self-v" @click="removeStyle"> Remove Style</button>
             <div id="style-selector">
-                <Select
-                    :elements="stylesStore.avaiableStyles"
-                    :selectedElement="stylesStore.selectedStyle"
-                    @select="changeSelectedStyle"
-                />
+                <Select :elements="stylesStore.avaiableStyles" :selectedElement="stylesStore.selectedStyle" @newSelection="changeSelectedStyle"/>
             </div>
             <button class="ata-btn-medium-big palette-dark-good ata-h2 centered-self-v" @click="addStyle"> Add Style </button>
         </main>
